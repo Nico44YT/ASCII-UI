@@ -14,7 +14,7 @@ public class JTextAreaAscii extends JTextArea {
     public JTextAreaAscii(AsciiScene scene) {
         this.scene = scene;
 
-        this.setFont(Fonts.FREE_MONOSPACED);
+        this.setFont(scene.getFont());
         this.setEditable(false);
         this.setDragEnabled(false);
 

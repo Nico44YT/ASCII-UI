@@ -1,7 +1,8 @@
 package nazario.ascii_ui.swing;
 
 import nazario.ascii_ui.AsciiScene;
-import nazario.ascii_ui.Fonts;
+import nazario.ascii_ui.component.UpdateListener;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,6 +14,8 @@ public class JFrameAscii extends JFrame {
     protected double fontWidth;
     protected double fontHeight;
 
+    protected boolean runningThread = false;
+
     public JFrameAscii(AsciiScene scene) {
         this.scene = scene;
         this.renderer = new JTextAreaAscii(this.scene);
@@ -20,15 +23,15 @@ public class JFrameAscii extends JFrame {
         this.setContentPane(this.renderer);
 
         this.setVisible(true);
-        this.setFont(Fonts.FREE_MONOSPACED);
+        this.setFont(scene.getFont());
 
-        FontMetrics metrics = this.getGraphics().getFontMetrics(Fonts.FREE_MONOSPACED);
+        FontMetrics metrics = this.getGraphics().getFontMetrics(scene.getFont());
 
         this.fontWidth = metrics.charWidth('#'); // width of one character
         this.fontHeight = metrics.getHeight();   // height of one line
 
-        int windowWidth = (int) ((scene.getWidth() + 1) * fontWidth);
-        int windowHeight = (int) ((scene.getHeight() + 1) * fontHeight);
+        int windowWidth = (int) Math.ceil((scene.getWidth() + 1) * fontWidth);
+        int windowHeight = (int) Math.ceil((scene.getHeight() + 1) * fontHeight);
 
         this.setMinimumSize(new Dimension(windowWidth, windowHeight));
         this.setMaximumSize(new Dimension(windowWidth, windowHeight));
@@ -41,6 +44,23 @@ public class JFrameAscii extends JFrame {
     }
 
     public void update() {
+        try{
+            Thread.sleep(20);
+        }catch (Exception ignore) {}
+
+        this.scene.getComponents().forEach(component -> {
+            UpdateListener listener = component.getUpdateListener();
+            if(listener != null) listener.update(component);
+        });
+
         this.renderer.render();
+
+        if(this.runningThread) this.update();
+    }
+
+    public void startUpdateThread() {
+        this.runningThread = true;
+
+        this.update();
     }
 }

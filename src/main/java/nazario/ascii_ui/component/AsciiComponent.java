@@ -10,10 +10,16 @@ public abstract class AsciiComponent {
 
     protected UUID id;
 
+    protected UpdateListener updateListener;
+
     public AsciiComponent(int x, int y) {
         this.position = new Position(x, y);
 
         this.id = UUID.randomUUID();
+    }
+
+    public void addUpdateListener(UpdateListener listener) {
+        this.updateListener = listener;
     }
 
     public void render(String[] frame, AsciiScene scene) {
@@ -34,5 +40,9 @@ public abstract class AsciiComponent {
 
     public UUID getId() {
         return this.id;
+    }
+
+    public UpdateListener getUpdateListener() {
+        return this.updateListener;
     }
 }

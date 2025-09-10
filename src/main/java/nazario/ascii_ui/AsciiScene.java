@@ -5,7 +5,9 @@ import nazario.ascii_ui.util.Position;
 import nazario.ascii_ui.util.RenderUtil;
 
 import javax.print.attribute.standard.QueuedJobCount;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class AsciiScene {
@@ -18,17 +20,22 @@ public class AsciiScene {
     protected List<Consumer<String>> setTextQueue;
     protected List<AsciiComponent> components;
 
+    protected float fontSize;
+    protected Font font;
+
     public AsciiScene(int width, int height, AsciiSceneProperties... properties) {
-        this(width, height, AsciiCharacterSet.DEFAULT, properties);
+        this(width, height, 29, AsciiCharacterSet.DEFAULT, properties);
     }
 
-    public AsciiScene(int width, int height, AsciiCharacterSet characterSet, AsciiSceneProperties... properties) {
+    public AsciiScene(int width, int height, float fontSize, AsciiCharacterSet characterSet, AsciiSceneProperties... properties) {
         this.width = width;
         this.height = height;
 
         this.characterSet = characterSet;
         this.components = new LinkedList<>();
         this.setTextQueue = new LinkedList<>();
+
+        this.font = Fonts.createDefault(fontSize);
 
         this.properties = new HashSet<>(List.of(properties));
     }
@@ -73,11 +80,19 @@ public class AsciiScene {
         this.components.addAll(List.of(components));
     }
 
+    public List<AsciiComponent> getComponents() {
+        return this.components;
+    }
+
     public int getWidth() {
         return this.width;
     }
 
     public int getHeight() {
         return this.height;
+    }
+
+    public Font getFont() {
+        return this.font;
     }
 }

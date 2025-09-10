@@ -14,6 +14,14 @@ public class AsciiTextComponent extends AsciiComponent {
 
     @Override
     public void render(String[] frame, AsciiScene scene) {
-        scene.setStringAt(frame, this.position, this.text);
+        scene.setStringAt(frame, this.position, getText());
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return this.text;
     }
 }
